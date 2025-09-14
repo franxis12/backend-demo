@@ -21,6 +21,19 @@ app.use(
   })
 );
 
+// Forzar cabeceras CORS explícitas
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    // Asegurar comportamiento correcto con caches/CDN
+    res.setHeader("Vary", "Origin");
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
 // Respuestas para preflight en cualquier ruta (Express 5 no admite '*')
 app.options(/.*/, cors({ origin: allowedOrigins }));
 
