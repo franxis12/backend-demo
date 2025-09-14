@@ -21,8 +21,8 @@ app.use(
   })
 );
 
-// Respuestas para preflight en cualquier ruta
-app.options("*", cors({ origin: allowedOrigins }));
+// Respuestas para preflight en cualquier ruta (Express 5 no admite '*')
+app.options(/.*/, cors({ origin: allowedOrigins }));
 
 // ========================
 // RUTAS
