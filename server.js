@@ -33,6 +33,11 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
+// Raíz (útil si Render tiene el health check en "/")
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "ok", service: "notes-api" });
+});
+
 // Obtener todas las notas
 app.get("/notes", async (req, res) => {
   try {
