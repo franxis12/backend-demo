@@ -6,6 +6,13 @@ const db = require("./db");
 const app = express();
 app.use(express.json());
 
+// Logging básico para depurar en Render
+app.use((req, res, next) => {
+  const origin = req.headers.origin || "-";
+  console.log(`${req.method} ${req.originalUrl} origin=${origin}`);
+  next();
+});
+
 // ✅ CORS configurable por variable de entorno
 // Usa CORS_ORIGINS=origen1,origen2 (coma-separado). Por defecto permite localhost:5173
 const allowedOrigins = (process.env.CORS_ORIGINS
