@@ -59,7 +59,7 @@ app.get("/", (req, res) => {
 });
 
 // Obtener todas las notas
-app.get("/notes", async (req, res) => {
+app.get(["/notes", "/api/notes"], async (req, res) => {
   try {
     const [results] = await db.query("SELECT * FROM notes ORDER BY created_at DESC");
     res.status(200).json(results);
@@ -70,7 +70,7 @@ app.get("/notes", async (req, res) => {
 });
 
 // Crear una nueva nota
-app.post("/notes", async (req, res) => {
+app.post(["/notes", "/api/notes"], async (req, res) => {
   try {
     const { text } = req.body;
     if (!text) return res.status(400).json({ error: "Text is required" });
@@ -84,7 +84,7 @@ app.post("/notes", async (req, res) => {
 });
 
 // Editar una nota
-app.put("/notes/:id", async (req, res) => {
+app.put(["/notes/:id", "/api/notes/:id"], async (req, res) => {
   try {
     const { id } = req.params;
     const { text } = req.body;
@@ -104,7 +104,7 @@ app.put("/notes/:id", async (req, res) => {
 });
 
 // Eliminar una nota
-app.delete("/notes/:id", async (req, res) => {
+app.delete(["/notes/:id", "/api/notes/:id"], async (req, res) => {
   try {
     const { id } = req.params;
 
