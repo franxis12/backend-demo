@@ -6,6 +6,9 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
+const PORT = process.env.PORT || 4000;
+
+
 // Permitir solo desde Vite local
 app.use(cors({
   origin: "http://localhost:5173"
@@ -17,8 +20,9 @@ db.query("SELECT 1")
   .catch(err => console.error("Connection error: ", err));
 
 // Mostrar mensaje del server
-app.listen(4000, () => {
-  console.log("Server listening on http://localhost:4000");
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 // ========================

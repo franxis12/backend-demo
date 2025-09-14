@@ -1,11 +1,16 @@
-const mysql = require("mysql2")
-const { createPool } = require("mysql2/promise")
+// db.js
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "Forever1993@",
-    database: "notes_app"
-})
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  ssl: {
+    rejectUnauthorized: true,
+  },
+});
 
-module.exports = pool.promise();
+export default pool;
