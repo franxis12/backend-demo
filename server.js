@@ -1,19 +1,37 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 const db = require("./db");
 
 const app = express();
 app.use(express.json());
 
-// ✅ CORS configurado para desarrollo local y producción (Vercel)
-app.use(cors({
-  origin: ["http://localhost:5173", "https://TU_FRONTEND.vercel.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-}));
+// ✅ CORS configurable por variable de entorno
+// Usa CORS_ORIGINS=origen1,origen2 (coma-separado). Por defecto permite localhost:5173
+const allowedOrigins = (process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",")
+  : ["http://localhost:5173", "https://TU_FRONTEND.vercel.app"]) // reemplaza por tu dominio real
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+);
+
+// Respuestas para preflight en cualquier ruta
+app.options("*", cors({ origin: allowedOrigins }));
 
 // ========================
 // RUTAS
 // ========================
+
+// Health check para despliegues
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 // Obtener todas las notas
 app.get("/notes", async (req, res) => {
@@ -40,7 +58,7 @@ app.post("/notes", async (req, res) => {
   }
 });
 
-// Editar una notah
+// Editar una nota
 app.put("/notes/:id", async (req, res) => {
   try {
     const { id } = req.params;
