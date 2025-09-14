@@ -10,9 +10,6 @@ const express = require("express")
 const db = require("./db")
 const cors = require("cors")
 
-const app = express()
-app.use(express.json())
-
 // ⚠️ Solo para pruebas
 app.use(cors());
 
