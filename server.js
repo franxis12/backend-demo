@@ -6,12 +6,40 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
+const express = require("express")
+const db = require("./db")
+const cors = require("cors")
+
+const app = express()
+app.use(express.json())
+
+// ⚠️ Solo para pruebas
+app.use(cors());
+
+db.query("SELECT 1")
+  .then(() => console.log("MySQL Connection successful"))
+  .catch(err => console.error("Connection error:", err));
+
+// ✅ Importante para Render
 const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+app.get("/notes", async (req, res) => {
+  try {
+    const [results] = await db.query("SELECT * FROM notes ORDER BY created_at DESC");
+    res.status(200).json(results);
+  } catch (err) {
+    console.error("Error getting notes:", err);
+    res.status(500).json({ error: "Failed to fetch notes" });
+  }
+});
 
 
 // Permitir solo desde Vite local
 app.use(cors({
-  origin: "http://localhost:5173"
+  origin: ['http://localhost:5173', 'https://tu-app-frontend-en-vercel.vercel.app']
 }));
 
 // Verificar conexión a MySQL
