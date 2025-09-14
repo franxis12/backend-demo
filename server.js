@@ -40,7 +40,7 @@ app.post("/notes", async (req, res) => {
   }
 });
 
-// Editar una nota
+// Editar una notah
 app.put("/notes/:id", async (req, res) => {
   try {
     const { id } = req.params;
